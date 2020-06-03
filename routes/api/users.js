@@ -61,20 +61,22 @@ router.post(
 
       user.password = await bcrypt.hash(password, salt);
 
-      await user.save();
+      await user.save(); //saves user in our database
 
-      //return jsonwebtoken (required to log user in after making account)
+      //payload for JWT
       const payload = {
         user: {
-          id: user.id,
+          id: user.id, //user id. Taken from MongoDB and stored is a special way defined by Mongoose
         },
       };
 
+      //creating the JWT
       jwt.sign(
-        payload,
-        config.get("jwtSecret"),
-        { expiresIn: 3600 },
+        payload, //payload that contains desired info. In our case the user's ID
+        config.get("jwtSecret"), //Secret that helps identify the JWT
+        { expiresIn: 3600 }, //Set expiry of JWT to be 1 hour
         (err, token) => {
+          //callback that throws an error to the catch below or responds to the post request with a json with the JWT
           if (err) throw err;
           res.json({ token });
         }
