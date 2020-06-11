@@ -1,16 +1,17 @@
 import React, { Fragment, useState } from "react";
-import {Link} from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { login } from "../../actions/auth";
 //import axios from 'axios';
 
-const Login = () => {
+const Login = ({ login }) => {
   const [formData, setFormData] = useState({
-
     email: "",
     password: "",
-
   });
 
-  const { email, password, password2 } = formData;
+  const { email, password } = formData;
 
   const onChange = (e) =>
     setFormData({
@@ -20,6 +21,7 @@ const Login = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    login(email, password);
     console.log("success");
   };
   return (
@@ -29,7 +31,6 @@ const Login = () => {
         <i className='fas fa-user'></i> Sign Into Your Account
       </p>
       <form className='form' onSubmit={(e) => onSubmit(e)}>
-        
         <div className='form-group'>
           <input
             type='email'
@@ -39,7 +40,6 @@ const Login = () => {
             onChange={(e) => onChange(e)}
             required
           />
-        
         </div>
         <div className='form-group'>
           <input
@@ -64,4 +64,8 @@ const Login = () => {
     </Fragment>
   );
 };
-export default Login;
+
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+};
+export default connect(null, { login })(Login);
