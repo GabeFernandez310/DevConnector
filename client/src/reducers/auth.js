@@ -5,6 +5,7 @@ import {
   AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
+  LOGOUT,
 } from "../actions/types";
 
 const initialState = {
@@ -36,10 +37,11 @@ export default function (state = initialState, action) {
       //to our App state we return the following
       return {
         ...state,
-        ...payload,
+        ...payload, //adds everything in our payload to state which is just payload: {token: ...} in this case so only token gets added
         isAuthenticated: true,
         loading: false,
       };
+    case LOGOUT:
     case LOGIN_FAIL:
     case REGISTER_FAIL:
     case AUTH_ERROR:
