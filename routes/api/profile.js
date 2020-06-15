@@ -4,6 +4,8 @@ const request = require("request");
 const config = require("config");
 const auth = require("../../middleware/auth");
 
+const Post = require("../../models/Post");
+
 const Profile = require("../../models/Profile");
 
 const User = require("../../models/User");
@@ -153,6 +155,8 @@ router.get("/user/:user_id", async (req, res) => {
 
 router.delete("/", auth, async (req, res) => {
   try {
+    //remove user posts
+    await Post.deleteMany({ user: req.user.id });
     //remove profile and user from DB
     await Profile.findOneAndRemove({ user: req.user.id });
     await User.findOneAndRemove({ _id: req.user.id });
