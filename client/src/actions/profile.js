@@ -3,6 +3,8 @@ import { setAlert } from "./alert";
 
 import {
   GET_PROFILE,
+  GET_PROFILES,
+  GET_REPOS,
   PROFILE_ERROR,
   UPDATE_PROFILE,
   ACCOUNT_DELETED,
@@ -14,11 +16,69 @@ import {
 export const getCurrentProfile = () => async (dispatch) => {
   try {
     //attempt to get the logged in user's profile from DB
-    const res = await axios.get("api/profile/me");
+    const res = await axios.get("/api/profile/me");
 
     //if successful trigger GET_PROFILE action in reducer
     dispatch({
       type: GET_PROFILE,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+//Get all profiles
+export const getProfiles = () => async (dispatch) => {
+  dispatch({ type: CLEAR_PROFILE });
+  try {
+    //attempt to get all profiles in DB
+    const res = await axios.get("/api/profile");
+
+    //if successful trigger GET_PROFILE action in reducer
+    dispatch({
+      type: GET_PROFILES,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+//Get profile by ID
+export const getProfileByID = (userId) => async (dispatch) => {
+  try {
+    //attempt to get all profiles in DB
+    const res = await axios.get(`/api/profile/user/${userId}`);
+
+    //if successful trigger GET_PROFILE action in reducer
+    dispatch({
+      type: GET_PROFILE,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+//Get Github Repos
+export const getGithubRepos = (username) => async (dispatch) => {
+  try {
+    //attempt to get all profiles in DB
+    const res = await axios.get(`/api/profile/github/${username}`);
+
+    //if successful trigger GET_PROFILE action in reducer
+    dispatch({
+      type: GET_REPOS,
       payload: res.data,
     });
   } catch (err) {
@@ -168,7 +228,7 @@ export const deleteEducation = (id) => async (dispatch) => {
 export const deleteAccount = () => async (dispatch) => {
   if (window.confirm("Are you sure? This can NOT be undone")) {
     try {
-      const res = await axios.delete("/api/profile");
+      await axios.delete("/api/profile");
 
       dispatch({
         type: CLEAR_PROFILE,
@@ -186,3 +246,5 @@ export const deleteAccount = () => async (dispatch) => {
     }
   }
 };
+
+//
