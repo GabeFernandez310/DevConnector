@@ -79,10 +79,10 @@ router.post(
     if (bio) profileFields.bio = bio;
     if (skills)
       profileFields.skills = skills.split(",").map((skill) => skill.trim()); // calls .split() to separate into items between each ',' and .trim() to get rid of white space    if (bio) profileFields.bio = bio;
+    if (githubusername) profileFields.githubusername = githubusername;
 
     //build social fields
     profileFields.social = {};
-    if (githubusername) profileFields.social.githubusername = githubusername;
     if (youtube) profileFields.social.youtube = youtube;
     if (twitter) profileFields.social.twitter = twitter;
     if (facebook) profileFields.social.facebook = facebook;
